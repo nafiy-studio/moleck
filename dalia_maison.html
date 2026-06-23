@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DALIA — Maison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#16100f; --bg2:#0f0b0c;
+    --or:#E6C0A0; --or-clair:#F4D9C2; --rose:#E8B4A8; --creme:#FBEFE2;
+    --txt:#F2E6DC; --muted:#9c8d85; --muted2:#6e635d;
+    --hair:rgba(232,180,168,0.16);
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Inter',-apple-system,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{background:radial-gradient(130% 110% at 50% 38%,#241715 0%,var(--bg2) 48%,#080606 100%);
+    color:var(--txt);font-family:var(--sans);-webkit-font-smoothing:antialiased;height:100vh;display:flex;flex-direction:column}
+
+  .top{display:flex;align-items:center;justify-content:space-between;padding:22px 30px;flex:0 0 auto}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .mk{width:24px;height:24px}
+  .brand .nm{font-weight:600;letter-spacing:.2em;font-size:11px;color:var(--muted)}
+  .brand .nm b{color:var(--or-clair);font-weight:600}
+  .hello{font-family:var(--serif);font-size:19px;color:var(--or-clair);letter-spacing:.04em}
+  .hello small{display:block;text-align:right;font-family:var(--sans);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+  .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;position:relative}
+  .stage{position:relative;width:min(60vh,420px);height:min(60vh,420px)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #soft{z-index:1}#aura{z-index:0}
+  .st{margin-top:6px;text-align:center}
+  .st .lbl{font-family:var(--serif);font-size:26px;letter-spacing:.14em;color:var(--or-clair);font-weight:500}
+  .st .sub{font-size:9px;letter-spacing:.36em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .conv{min-height:30px;margin-top:14px;text-align:center;font-size:14px;color:var(--txt);opacity:.9;font-family:var(--serif);font-style:italic;
+    max-width:560px;padding:0 20px;transition:opacity .4s}
+  .conv .you{color:var(--rose)}
+  .m-media{margin:10px auto 0;max-width:340px}
+  .m-media img,.m-media video{width:100%;border-radius:16px;display:block;max-height:220px;object-fit:cover;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  .m-media .yt{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}
+  .m-media .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .joindre{margin-top:12px;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.06em;color:var(--muted);
+    border:1px solid var(--hair);border-radius:999px;padding:7px 15px;cursor:pointer;background:rgba(232,180,168,0.04)}
+  .joindre:hover{color:var(--or-clair);border-color:rgba(232,180,168,0.4)}
+  .joindre svg{width:15px;height:15px;stroke:currentColor;stroke-width:1.5;fill:none}
+  .now{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:13px;
+    background:rgba(232,180,168,0.08);border:1px solid var(--hair);border-radius:18px;padding:10px 18px;backdrop-filter:blur(10px)}
+  .now.on{display:flex}
+  .now .art{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--rose),var(--or-clair));flex:0 0 auto;background-size:cover;background-position:center}
+  .now .meta{min-width:150px}
+  .now .meta .ti{font-size:13px;color:var(--txt);font-weight:500}
+  .now .meta .ar{font-size:11px;color:var(--muted);margin-top:1px}
+  .now .eq{display:flex;gap:2.5px;align-items:flex-end;height:18px}
+  .now .eq i{width:3px;background:var(--or-clair);border-radius:2px;height:4px;transition:height .15s}
+
+  .cmds{flex:0 0 auto;display:flex;gap:14px;justify-content:center;padding:24px 20px 38px}
+  .cmd{display:flex;flex-direction:column;align-items:center;gap:9px;width:104px;padding:18px 10px;border-radius:20px;
+    border:1px solid var(--hair);background:linear-gradient(180deg,rgba(232,180,168,0.05),transparent);cursor:pointer;transition:all .25s}
+  .cmd:hover{border-color:rgba(232,180,168,0.4);background:rgba(232,180,168,0.08);transform:translateY(-2px)}
+  .cmd svg{width:26px;height:26px;stroke:var(--or-clair);stroke-width:1.4;fill:none}
+  .cmd span{font-size:11px;letter-spacing:.1em;color:var(--txt)}
+  .cmd small{font-size:9px;color:var(--muted);letter-spacing:.04em}
+
+  .foot{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2)}
+  .demo{position:fixed;bottom:12px;right:16px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    background:rgba(232,180,168,0.06);border:1px solid var(--hair);border-radius:999px;padding:7px 15px;cursor:pointer}
+  .demo:hover{color:var(--or-clair)}
+  .fb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;color:var(--muted)}
+  .chatbar{margin-top:16px;display:flex;align-items:center;gap:8px;width:min(560px,86vw);
+    border:1px solid var(--hair);border-radius:999px;padding:6px 6px 6px 18px;background:rgba(232,180,168,0.05)}
+  .chatbar:focus-within{border-color:rgba(232,180,168,0.4)}
+  .chatbar input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--txt);
+    font-family:var(--sans);font-size:14px}
+  .chatbar input::placeholder{color:var(--muted2)}
+  .chatbar button{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(135deg,var(--rose),var(--or-clair));display:flex;align-items:center;justify-content:center}
+  .chatbar button:hover{filter:brightness(1.08)}
+  .chatbar button svg{width:18px;height:18px;fill:#16100f}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">
+      <svg class="mk" viewBox="0 0 40 40" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="40" y2="40">
+        <stop offset="0" stop-color="#FBEFE2"/><stop offset="1" stop-color="#E8B4A8"/></linearGradient></defs>
+        <rect x="2" y="2" width="36" height="36" rx="10" stroke="url(#g)" stroke-width="1.4"/>
+        <path d="M12 28V12l16 16V12" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="nm">NAFIY · <b>DALIA</b></div>
+    </div>
+    <div class="hello">Bonjour<small>Maison</small></div>
+  </div>
+
+  <div class="mid">
+    <div class="stage"><canvas id="aura"></canvas><canvas id="soft"></canvas></div>
+    <div class="st"><div class="lbl" id="st-lbl">Veille</div><div class="sub" id="st-sub">à votre écoute</div></div>
+    <div class="conv" id="conv"></div>
+    <div class="m-media" id="media"></div>
+    <button class="joindre" onclick="document.getElementById('f-m').click()">
+      <svg viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a5 5 0 01-7-7l8.5-8.5a3.5 3.5 0 015 5l-8.5 8.5a2 2 0 01-3-3l8-8"/></svg>
+      partager une photo ou une vidéo</button>
+    <input type="file" id="f-m" accept="image/*,video/*" hidden>
+    <div class="chatbar">
+      <input type="text" id="msgin" placeholder="écris à Dalia… (musique, vidéo, recherche)" onkeydown="if(event.key==='Enter')sendChat()">
+      <button title="Envoyer" onclick="sendChat()"><svg viewBox="0 0 24 24"><path d="M4 12l16-7-7 16-2-7-7-2z"/></svg></button>
+    </div>
+  </div>
+
+  <div class="cmds">
+    <div class="cmd" onclick="say('J\'allume la télévision.')">
+      <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
+      <span>Télé</span><small>« allume la télé »</small></div>
+    <div class="cmd" onclick="say('Je lance Spotify.');window.DALIA.setNowPlaying({title:'Musique douce',artist:'Spotify · Maison'})">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M7 9.5c3-1 7-0.8 10 1M7.5 13c2.5-0.7 5.5-0.5 8 1M8 16c2-0.5 4-0.4 5.5 0.7"/></svg>
+      <span>Spotify</span><small>« mets de la musique »</small></div>
+    <div class="cmd" onclick="say('Il fait 27 degrés, ciel dégagé.')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></svg>
+      <span>Météo</span><small>« quel temps »</small></div>
+    <div class="cmd" onclick="say('Minuteur réglé sur 10 minutes.')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <span>Minuteur</span><small>« minuteur 10 min »</small></div>
+  </div>
+
+  <div class="foot" id="foot">micro ouvert · à l'écoute</div>
+  <div class="now" id="now">
+    <div class="art" id="now-art"></div>
+    <div class="meta"><div class="ti" id="now-ti">—</div><div class="ar" id="now-ar">—</div></div>
+    <div class="eq" id="now-eq"></div>
+  </div>
+  <button class="demo" id="demo" onclick="toggleDemo()">▶ démo</button>
+  <div class="fb" id="fb">WebGL indisponible — ouvre dans Chrome.</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ===== états doux (chaleureux, nacrés — aucun bleu, aucun acier froid) ===== */
+var PRESETS={
+  standby:{amp:0.05,spd:0.9,rot:0.7,glowB:0.92,glowS:2.1,glowV:0.07,sizeP:0.10,aura:0.8, pcol:[233,184,158],icol:[255,240,220],hcol:[240,212,172], lbl:'Veille',sub:'à votre écoute'},
+  listen :{amp:0.10,spd:1.4,rot:1.0,glowB:0.86,glowS:1.95,glowV:0.16,sizeP:0.16,aura:1.2, pcol:[243,205,185],icol:[255,246,232],hcol:[248,224,198], lbl:'Écoute',sub:'je vous écoute'},
+  think  :{amp:0.14,spd:1.7,rot:1.2,glowB:0.74,glowS:1.8,glowV:0.22,sizeP:0.16,aura:1.0, pcol:[218,202,196],icol:[238,228,222],hcol:[228,214,206], lbl:'Un instant',sub:'je réfléchis'},
+  speak  :{amp:0.20,spd:1.9,rot:0.9,glowB:0.94,glowS:2.0,glowV:0.20,sizeP:0.22,aura:1.3, pcol:[236,178,152],icol:[255,236,214],hcol:[250,210,180], lbl:'Réponse',sub:'je vous réponds'}
+};
+window.DALIA={target:'standby',
+  cur:Object.assign({},PRESETS.standby,{pcol:PRESETS.standby.pcol.slice(),icol:PRESETS.standby.icol.slice(),hcol:PRESETS.standby.hcol.slice()}),
+  setState:function(s){if(!PRESETS[s])return;this.target=s;
+    document.getElementById('st-lbl').textContent=PRESETS[s].lbl;
+    document.getElementById('st-sub').textContent=PRESETS[s].sub;
+    document.getElementById('foot').textContent= s==='think'?'je réfléchis…':(s==='speak'?'réponse en cours':(s==='listen'?'je vous écoute':'micro ouvert · à l\'écoute'));},
+  hear:function(t){var c=document.getElementById('conv');c.innerHTML='<span class="you">« '+t+' »</span>';c.style.opacity=1;},
+  say:function(t){var c=document.getElementById('conv');c.textContent=t;c.style.opacity=1;},
+  userMedia:function(m){ showMedia(m); },
+  daliaMedia:function(m){ showMedia(m); },
+  setNowPlaying:function(n){var el=document.getElementById('now');
+    if(!n){el.classList.remove('on');return;}
+    document.getElementById('now-ti').textContent=n.title||'';
+    document.getElementById('now-ar').textContent=n.artist||'';
+    var a=document.getElementById('now-art'); if(n.art){a.style.backgroundImage='url("'+n.art+'")';}
+    el.classList.add('on');}
+};
+/* égaliseur de la barre en lecture */
+(function(){var eq=document.getElementById('now-eq');for(var i=0;i<5;i++)eq.appendChild(document.createElement('i'));
+  setInterval(function(){var on=document.getElementById('now').classList.contains('on');
+    [].forEach.call(eq.children,function(b){b.style.height=(on?(4+Math.random()*14):4)+'px';});},180);})();
+function ytId(u){var m=(u||'').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);return m?m[1]:null;}
+function showMedia(m){var el=document.getElementById('media');if(!m||!m.src){el.innerHTML='';return;}
+  var s=(m.src+'').replace(/"/g,'&quot;');
+  if(m.kind==='image')el.innerHTML='<img src="'+s+'" alt="">';
+  else if(m.kind==='video')el.innerHTML='<video src="'+s+'" controls playsinline></video>';
+  else if(m.kind==='youtube'){var id=ytId(m.src);el.innerHTML=id?'<div class="yt"><iframe src="https://www.youtube.com/embed/'+id+'" allowfullscreen></iframe></div>':'';}
+  else el.innerHTML='';}
+(function(){var f=document.getElementById('f-m');if(f)f.addEventListener('change',function(){var file=this.files[0];if(file){var url=URL.createObjectURL(file);window.DALIA.userMedia({kind:file.type.indexOf('video')===0?'video':'image',src:url});}this.value='';});})();
+function say(t){window.DALIA.setState('speak');window.DALIA.say(t);clearTimeout(say._t);say._t=setTimeout(function(){window.DALIA.setState('standby');},3500);}
+/* chat tapé (mode maison) : un lien s'affiche localement ; sinon vrai tour de
+   conversation envoyé au cerveau Python, qui ré-affiche la bulle et agit. */
+function sendChat(){var i=document.getElementById('msgin'),v=i.value.trim();if(!v)return;i.value='';
+  if(/^https?:\/\//i.test(v)){var k=ytId(v)?'youtube':(/\.(png|jpe?g|gif|webp|avif|bmp)(\?|$)/i.test(v)?'image':(/\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(v)?'video':'link'));window.DALIA.userMedia({kind:k,src:v});return;}
+  if(window.pywebview&&pywebview.api&&pywebview.api.send_text){pywebview.api.send_text(v);}
+  else{window.DALIA.hear(v);}}
+
+var STAGE=document.querySelector('.stage');
+function box(){return{w:STAGE.clientWidth,h:STAGE.clientHeight};}
+function lerp(a,b,k){return a+(b-a)*k;}
+function pulse(t,a){return a*(0.6*Math.sin(t*1.3)+0.4*Math.sin(t*0.6+0.7));}
+
+/* ===== noyau doux : nuage nacré diffus (WebGL) ===== */
+(function(){
+  if(!window.THREE){document.getElementById('fb').style.display='flex';return;}
+  var canvas=document.getElementById('soft'),renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});}catch(e){document.getElementById('fb').style.display='flex';return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(45,1,0.1,100);camera.position.set(0,0,12);
+  var core=new THREE.Group();scene.add(core);
+  function tex(){var c=document.createElement('canvas');c.width=c.height=64;var g=c.getContext('2d');
+    var rg=g.createRadialGradient(32,32,0,32,32,32);rg.addColorStop(0,'rgba(255,250,244,1)');rg.addColorStop(0.45,'rgba(244,217,194,0.65)');rg.addColorStop(1,'rgba(232,180,168,0)');
+    g.fillStyle=rg;g.fillRect(0,0,64,64);var t=new THREE.Texture(c);t.needsUpdate=true;return t;}
+  var T=tex();
+  function bloom(n,radius,jit,size,op){var pos=new Float32Array(n*3),ph=2.399963,phase=new Float32Array(n);
+    for(var i=0;i<n;i++){var y=1-(i/(n-1))*2,r=Math.sqrt(1-y*y),th=ph*i,rr=radius*(1+(Math.random()-0.5)*jit);
+      pos[i*3]=Math.cos(th)*r*rr;pos[i*3+1]=y*rr;pos[i*3+2]=Math.sin(th)*r*rr;phase[i]=Math.random()*6.28;}
+    var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    var p=new THREE.Points(g,new THREE.PointsMaterial({size:size,map:T,transparent:true,opacity:op,depthWrite:false,blending:THREE.AdditiveBlending,color:0xE8B4A8}));
+    p.userData={base:pos.slice(0),phase:phase};return p;}
+  function flow(p,t,amp,spd){var pos=p.geometry.attributes.position.array,b=p.userData.base,ph=p.userData.phase,n=ph.length;
+    for(var i=0;i<n;i++){var f=1+amp*(Math.sin(t*spd+ph[i])*0.6+Math.sin(t*spd*0.4+ph[i]*1.6)*0.4);
+      pos[i*3]=b[i*3]*f;pos[i*3+1]=b[i*3+1]*f;pos[i*3+2]=b[i*3+2]*f;}
+    p.geometry.attributes.position.needsUpdate=true;}
+  var shell=bloom(1300,0.92,0.16,0.10,0.62),inner=bloom(560,0.5,0.4,0.13,0.78),halo=bloom(420,1.35,0.5,0.07,0.3);
+  core.add(shell);core.add(inner);core.add(halo);
+  var glow=new THREE.Sprite(new THREE.SpriteMaterial({map:T,color:0xFBEFE2,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false}));core.add(glow);
+  var tx=0,ty=0,mx=0,my=0;
+  addEventListener('mousemove',function(e){tx=e.clientX/innerWidth-0.5;ty=e.clientY/innerHeight-0.5;});
+  function resize(){var b=box();renderer.setSize(b.w,b.h,false);camera.aspect=b.w/b.h;camera.updateProjectionMatrix();}
+  addEventListener('resize',resize);resize();
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,t=0;
+  function frame(){t+=0.01;
+    var tgt=PRESETS[window.DALIA.target],c=window.DALIA.cur;
+    for(var k in tgt){if(Array.isArray(tgt[k])){for(var j=0;j<3;j++)c[k][j]=lerp(c[k][j],tgt[k][j],0.04);}else if(typeof tgt[k]==='number')c[k]=lerp(c[k],tgt[k],0.04);}
+    // irisation nacre : la teinte glisse doucement rose-or ↔ champagne
+    var irid=0.5+0.5*Math.sin(t*0.25), pr=c.pcol[0]+irid*8, pg=c.pcol[1]+irid*4, pb=c.pcol[2]-irid*10;
+    shell.material.color.setRGB(pr/255,pg/255,pb/255);
+    inner.material.color.setRGB(c.icol[0]/255,c.icol[1]/255,c.icol[2]/255);
+    halo.material.color.setRGB(c.hcol[0]/255,c.hcol[1]/255,c.hcol[2]/255);
+    glow.material.color.setRGB(c.icol[0]/255,c.icol[1]/255,c.icol[2]/255);
+    if(!reduce){shell.rotation.y+=0.0012*c.rot;shell.rotation.x+=0.0005*c.rot;inner.rotation.y-=0.0018*c.rot;halo.rotation.y+=0.0006*c.rot;
+      flow(shell,t,c.amp,c.spd);flow(inner,t,c.amp*1.4,c.spd*1.2);}
+    glow.material.opacity=Math.max(0.25,c.glowB+pulse(t,c.glowV));glow.scale.setScalar(c.glowS*(1+pulse(t,c.glowV*0.5)));
+    shell.material.size=0.10*(1+Math.sin(t*1.9)*c.sizeP);inner.material.size=0.13*(1+Math.sin(t*2.1+1)*c.sizeP);
+    mx+=(tx-mx)*0.04;my+=(ty-my)*0.04;core.rotation.y=mx*0.5;core.rotation.x=my*0.4;
+    renderer.render(scene,camera);requestAnimationFrame(frame);}frame();
+})();
+
+/* ===== corolle de lumière (2D doux) — remplace la couronne méca ===== */
+(function(){
+  var cv=document.getElementById('aura'),ctx=cv.getContext('2d'),W,H,R,cx,cy,dpr;
+  function rs(){dpr=Math.min(window.devicePixelRatio||1,2);var b=box();W=b.w;H=b.h;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);cx=W/2;cy=H/2;R=Math.min(W,H)/2;}
+  addEventListener('resize',rs);
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,t=0;
+  function petals(n,rMid,size,rot,col,al){ctx.save();ctx.translate(cx,cy);ctx.rotate(rot);ctx.globalCompositeOperation='lighter';
+    for(var i=0;i<n;i++){var a=(i/n)*Math.PI*2,x=Math.cos(a)*rMid,y=Math.sin(a)*rMid;
+      var g=ctx.createRadialGradient(x,y,0,x,y,size);g.addColorStop(0,'rgba('+col+','+al+')');g.addColorStop(1,'rgba('+col+',0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,size,0,Math.PI*2);ctx.fill();}ctx.restore();}
+  function ring(r,w,col,al){ctx.save();ctx.translate(cx,cy);ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.lineWidth=w;ctx.strokeStyle='rgba('+col+','+al+')';ctx.stroke();ctx.restore();}
+  function draw(){t+=0.01;ctx.clearRect(0,0,W,H);
+    var c=window.DALIA.cur, A=(c.aura||1), br=0.5+0.5*Math.sin(t*1.1);
+    var rose='232,180,168', creme='251,239,226', champ='240,212,172';
+    // corolle externe lente (fleur de lumière)
+    petals(8, R*0.62, R*0.20*A, reduce?0:t*0.10, rose, 0.10+0.05*br);
+    petals(6, R*0.46, R*0.16*A, reduce?0:-t*0.14, champ, 0.10+0.05*br);
+    // halo doux + anneaux fins lisses (zéro dent, zéro graduation)
+    var hg=ctx.createRadialGradient(cx,cy,R*0.20,cx,cy,R*0.75);
+    hg.addColorStop(0,'rgba(251,239,226,'+(0.05+0.03*br)+')');hg.addColorStop(1,'rgba(251,239,226,0)');
+    ctx.fillStyle=hg;ctx.beginPath();ctx.arc(cx,cy,R*0.75,0,Math.PI*2);ctx.fill();
+    ring(R*0.40,1,champ,0.16+0.06*br); ring(R*0.50,1,rose,0.10);
+    requestAnimationFrame(draw);}
+  rs();draw();
+})();
+
+/* ===== démo ===== */
+var demoOn=false,tm=[];function clr(){tm.forEach(clearTimeout);tm=[];}
+function step(d,f){tm.push(setTimeout(f,d));}
+function toggleDemo(){demoOn=!demoOn;document.getElementById('demo').textContent=demoOn?'■ stop':'▶ démo';clr();if(demoOn)run();else window.DALIA.setState('standby');}
+function run(){var D=window.DALIA;
+  step(0,function(){D.setState('standby');});
+  step(900,function(){D.setState('listen');D.hear('Dalia, mets de la musique douce');});
+  step(2800,function(){D.setState('think');});
+  step(4000,function(){D.setState('speak');D.say('Je lance une playlist douce pour vous.');
+    D.setNowPlaying({title:'Musique douce',artist:'Spotify · Maison'});});
+  step(7500,function(){D.setState('listen');D.hear('Et quel temps il fait ?');});
+  step(9200,function(){D.setState('think');});
+  step(10200,function(){D.setState('speak');D.say('27 degrés, ciel dégagé.');});
+  step(13500,function(){D.setState('listen');D.hear('Regarde cette photo');D.userMedia({kind:'image',src:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600'});});
+  step(15500,function(){D.setState('speak');D.say('Quelle jolie photo. Je la garde dans l\'album.');});
+  step(18500,function(){D.setState('standby');showMedia(null);});
+  step(20500,function(){if(demoOn)run();});}
+window.DALIA.setState('standby');
+</script>
+</body>
+</html>

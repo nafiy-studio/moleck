@@ -1,0 +1,27 @@
+# Secrets et config locale
+.env
+
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+
+# Donnees vocales personnelles (RGPD : ne quittent jamais la machine)
+speaker_profile.npz
+stt_eval/
+vision_test/
+
+# Etat et logs runtime
+*.log
+state.json
+last_output.md
+orb_position.json
+.ask.lock
+*.mp3
+maintenance_report.md
+
+# Modeles TTS locaux (a telecharger separement)
+piper_voices/
+
+# macOS
+.DS_Store

@@ -1,0 +1,29 @@
+# Moleck — dependances (cross-OS : macOS, Linux, Windows)
+# (c) Nafiy Studio. Voir LICENSE.
+
+# Coeur (toutes plateformes)
+openai
+python-dotenv
+numpy
+soundfile
+sounddevice
+psutil
+send2trash
+
+# Synthese vocale (cross-OS)
+edge-tts
+piper-tts
+
+# Interface orbe / cockpit
+pywebview
+
+# Detection de voix / locuteur
+silero-vad
+resemblyzer
+
+# STT cross-OS (Windows, Linux, Mac Intel)
+faster-whisper
+
+# STT Apple Silicon uniquement (ignore automatiquement ailleurs)
+mlx-whisper; sys_platform == "darwin" and platform_machine == "arm64"
+parakeet-mlx; sys_platform == "darwin" and platform_machine == "arm64"

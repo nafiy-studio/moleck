@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#16100f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DALIA">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.jpg">
+<title>DALIA</title>
+<style>
+  :root{
+    --bg:#16100f; --bg2:#0f0b0c; --or:#E6C0A0; --or-clair:#F4D9C2;
+    --rose:#E8B4A8; --txt:#F2E6DC; --muted:#9c8d85; --muted2:#6e635d;
+    --hair:rgba(232,180,168,0.16);
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:-apple-system,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden}
+  body{background:radial-gradient(130% 100% at 50% 0%,#241715 0%,var(--bg2) 55%,#080606 100%);
+    color:var(--txt);font-family:var(--sans);height:100dvh;display:flex;flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+
+  .top{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;flex:0 0 auto}
+  .brand{display:flex;align-items:center;gap:9px}
+  .brand .mk{width:22px;height:22px}
+  .brand .nm{font-weight:600;letter-spacing:.22em;font-size:11px;color:var(--muted)}
+  .brand .nm b{color:var(--or-clair)}
+  .dot{width:8px;height:8px;border-radius:50%;background:#6e635d;transition:background .3s}
+  .dot.on{background:#8fcf9a;box-shadow:0 0 8px #8fcf9a}
+  .dot.busy{background:var(--or-clair);box-shadow:0 0 8px var(--or-clair)}
+  .gear{color:var(--muted);font-size:18px;padding:6px;cursor:pointer}
+
+  .conv{flex:1;overflow-y:auto;padding:8px 16px 16px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+  .msg{max-width:84%;padding:11px 15px;border-radius:18px;font-size:15px;line-height:1.4;word-wrap:break-word;animation:pop .2s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .msg.you{align-self:flex-end;background:linear-gradient(135deg,var(--rose),var(--or-clair));color:#16100f;border-bottom-right-radius:5px}
+  .msg.dalia{align-self:flex-start;background:rgba(232,180,168,0.08);border:1px solid var(--hair);border-bottom-left-radius:5px}
+  .msg.sys{align-self:center;background:none;color:var(--muted2);font-size:12px;font-style:italic;padding:4px}
+  .meta{align-self:flex-start;font-size:10px;color:var(--muted2);letter-spacing:.08em;margin-top:-6px}
+
+  .bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px calc(14px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--hair);background:rgba(15,11,12,0.6);backdrop-filter:blur(12px)}
+  .bar input{flex:1;min-width:0;background:rgba(232,180,168,0.06);border:1px solid var(--hair);border-radius:22px;
+    padding:12px 16px;color:var(--txt);font-size:16px;font-family:var(--sans);outline:none}
+  .bar input:focus{border-color:rgba(232,180,168,0.4)}
+  .btn{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .btn svg{width:22px;height:22px}
+  .mic{background:rgba(232,180,168,0.1);border:1px solid var(--hair)}
+  .mic svg{stroke:var(--or-clair);fill:none;stroke-width:1.7}
+  .mic.rec{background:var(--rose);animation:pulse 1.2s infinite}
+  .mic.rec svg{stroke:#16100f}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,180,168,.5)}50%{box-shadow:0 0 0 10px rgba(232,180,168,0)}}
+  .send{background:linear-gradient(135deg,var(--rose),var(--or-clair))}
+  .send svg{fill:#16100f}
+
+  .sheet{position:fixed;inset:0;background:rgba(8,6,6,0.7);backdrop-filter:blur(6px);display:none;align-items:flex-end;z-index:10}
+  .sheet.on{display:flex}
+  .card{width:100%;background:var(--bg);border-top-left-radius:24px;border-top-right-radius:24px;
+    border-top:1px solid var(--hair);padding:24px 22px calc(28px + env(safe-area-inset-bottom))}
+  .card h2{font-family:var(--serif);font-size:22px;color:var(--or-clair);margin-bottom:4px}
+  .card p{font-size:13px;color:var(--muted);margin-bottom:18px}
+  .card label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+  .card input{width:100%;background:rgba(232,180,168,0.06);border:1px solid var(--hair);border-radius:12px;
+    padding:13px 15px;color:var(--txt);font-size:15px;outline:none;font-family:var(--sans)}
+  .row{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
+  .row span{font-size:14px}
+  .sw{width:48px;height:28px;border-radius:14px;background:rgba(232,180,168,0.15);position:relative;cursor:pointer;transition:.2s}
+  .sw.on{background:var(--rose)}
+  .sw i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+  .sw.on i{left:23px}
+  .save{width:100%;margin-top:24px;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--rose),var(--or-clair));
+    color:#16100f;font-weight:600;font-size:15px;cursor:pointer}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">
+      <svg class="mk" viewBox="0 0 40 40" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="40" y2="40">
+        <stop offset="0" stop-color="#FBEFE2"/><stop offset="1" stop-color="#E8B4A8"/></linearGradient></defs>
+        <rect x="2" y="2" width="36" height="36" rx="10" stroke="url(#g)" stroke-width="1.4"/>
+        <path d="M12 28V12l16 16V12" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="nm">NAFIY · <b>DALIA</b> <span class="dot" id="dot"></span></div>
+    </div>
+    <div class="gear" onclick="openSheet()">⚙</div>
+  </div>
+
+  <div class="conv" id="conv"></div>
+
+  <div class="bar">
+    <button class="btn mic" id="mic" onclick="toggleMic()" aria-label="parler">
+      <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+    </button>
+    <input id="in" type="text" placeholder="parle ou écris à Dalia…" enterkeyhint="send"
+           onkeydown="if(event.key==='Enter')send()">
+    <button class="btn send" onclick="send()" aria-label="envoyer">
+      <svg viewBox="0 0 24 24"><path d="M4 12l16-7-7 16-2-7-7-2z"/></svg>
+    </button>
+  </div>
+
+  <div class="sheet" id="sheet">
+    <div class="card">
+      <h2>Réglages</h2>
+      <p>DALIA tourne sur ton Mac. Renseigne le code d'accès (token), une seule fois.</p>
+      <label>Token d'accès</label>
+      <input id="tok" type="password" placeholder="DALIA_API_TOKEN" autocomplete="off">
+      <div class="row"><span>Voix de Dalia (lecture à voix haute)</span>
+        <div class="sw" id="ttsSw" onclick="this.classList.toggle('on')"><i></i></div></div>
+      <button class="save" onclick="saveSettings()">Enregistrer</button>
+    </div>
+  </div>
+
+<script>
+const $ = s => document.querySelector(s);
+const conv = $('#conv');
+const API = location.origin;
+let TOKEN = localStorage.getItem('dalia_token') || '';
+let TTS = localStorage.getItem('dalia_tts') !== '0';
+
+function add(text, who, meta){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who; d.textContent = text;
+  conv.appendChild(d);
+  if(meta){const m=document.createElement('div');m.className='meta';m.textContent=meta;conv.appendChild(m);}
+  conv.scrollTop = conv.scrollHeight;
+  while(conv.children.length > 60) conv.removeChild(conv.firstChild);
+}
+
+async function health(){
+  try{const r = await fetch(API+'/api/health'); $('#dot').classList.toggle('on', r.ok);}
+  catch(e){ $('#dot').classList.remove('on'); }
+}
+
+async function ask(text){
+  if(!TOKEN){ openSheet(); add("Renseigne d'abord ton token dans les réglages.", 'sys'); return; }
+  add(text, 'you');
+  $('#dot').className = 'dot busy';
+  try{
+    const r = await fetch(API+'/api/ask', {
+      method:'POST', headers:{'Content-Type':'application/json','X-DALIA-Token':TOKEN},
+      body: JSON.stringify({text})
+    });
+    if(r.status === 401){ add("Token refusé — vérifie les réglages.", 'sys'); openSheet(); return; }
+    const j = await r.json();
+    if(j.error){ add('⚠ '+j.error, 'sys'); return; }
+    add(j.reply, 'dalia', (j.model||'') + (j.perimeter==='MEDIA'?' · maison':''));
+    speak(j.reply);
+  }catch(e){ add("Hors ligne — DALIA est-elle lancée et le tunnel actif ?", 'sys'); }
+  finally{ $('#dot').className = 'dot on'; health(); }
+}
+
+function send(){ const i=$('#in'); const v=i.value.trim(); if(!v) return; i.value=''; ask(v); }
+
+// ── Voix : reconnaissance (entrée) ──
+let rec=null, listening=false;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+function toggleMic(){
+  if(!SR){ add("La reconnaissance vocale n'est pas dispo sur ce navigateur — tape, ou utilise Safari/Chrome récent.", 'sys'); return; }
+  if(listening){ rec && rec.stop(); return; }
+  rec = new SR(); rec.lang='fr-FR'; rec.interimResults=true; rec.continuous=false;
+  let finalT='';
+  rec.onstart = ()=>{ listening=true; $('#mic').classList.add('rec'); };
+  rec.onresult = e=>{ let t=''; for(const r of e.results) t+=r[0].transcript; finalT=t; $('#in').value=t; };
+  rec.onerror = ()=>{};
+  rec.onend = ()=>{ listening=false; $('#mic').classList.remove('rec'); const v=finalT.trim(); $('#in').value=''; if(v) ask(v); };
+  rec.start();
+}
+
+// ── Voix : synthèse (sortie) ──
+let frVoice=null;
+function pickVoice(){ const vs=speechSynthesis.getVoices(); frVoice = vs.find(v=>/fr-FR/i.test(v.lang)) || vs.find(v=>/^fr/i.test(v.lang)) || null; }
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(text){
+  if(!TTS || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text); u.lang='fr-FR'; if(frVoice) u.voice=frVoice; u.rate=1.02;
+  speechSynthesis.speak(u);
+}
+
+// ── Réglages ──
+function openSheet(){ $('#tok').value = TOKEN; $('#ttsSw').classList.toggle('on', TTS); $('#sheet').classList.add('on'); }
+function saveSettings(){
+  TOKEN = $('#tok').value.trim(); localStorage.setItem('dalia_token', TOKEN);
+  TTS = $('#ttsSw').classList.contains('on'); localStorage.setItem('dalia_tts', TTS?'1':'0');
+  $('#sheet').classList.remove('on'); health();
+}
+$('#sheet').addEventListener('click', e=>{ if(e.target.id==='sheet') $('#sheet').classList.remove('on'); });
+
+// ── Démarrage ──
+if(!TOKEN){ add("Bonjour. Ouvre les réglages ⚙ pour mettre ton token, puis parle-moi.", 'dalia'); }
+else { add("Je t'écoute.", 'dalia'); }
+health(); setInterval(health, 20000);
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
+</script>
+</body>
+</html>
